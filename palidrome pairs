@@ -1,0 +1,97 @@
+public class Solution {
+    public List<List<Integer>> palindromePairs(String[] words) {
+        // define return structure
+        List<List<Integer>> result = new LinkedList<List<Integer>>();
+        
+        // use map to store words and position
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        for (int i = 0; i < words.length; i++) {
+            map.put(words[i], i);
+        }
+        
+        if (map.containsKey("")) {
+            int blankIndex = map.get("");
+            for (int i = 0; i < words.length; i++) {
+                if (i == blankIndex) {
+                    continue;
+                }
+                
+                if (isPalidrome(words[i])) {
+                    result.add(Arrays.asList(i, blankIndex));
+                    result.add(Arrays.asList(blankIndex, i));
+                }
+            }
+        }
+        
+        for (int i = 0; i < words.length; i++) {
+            String reverseString = reverse(words[i]);
+            if (map.containsKey(reverseString)) {
+                int foundIndex = map.get(reverseString);
+                if (i == foundIndex) {
+                    continue;
+                }
+                result.add(Arrays.asList(i, foundIndex));
+            }
+        }
+        
+        for (int i = 0; i < words.length; i++) {
+            // find the cut
+            for (int j = 1; j < words[i].length(); j++) {
+                
+                String headPart = words[i].substring(j);
+                String tailPart = words[i].substring(0, j);
+                
+                if (isPalidrome(headPart)) {
+                    String reversedTailPart = reverse(tailPart);
+                    if (map.containsKey(reversedTailPart)) {
+                        int foundIndex = map.get(reversedTailPart);
+                        if (foundIndex == i) {
+                            continue;
+                        }
+                        
+                        result.add(Arrays.asList(i, foundIndex));
+                    }
+                }
+                
+                if (isPalidrome(tailPart)) {
+                    String reversedHeadPart = reverse(headPart);
+                    if (map.containsKey(reversedHeadPart)) {
+                        int foundIndex = map.get(reversedHeadPart);
+                        if (foundIndex == i) {
+                            continue;
+                        }
+                        
+                        
+                        result.add(Arrays.asList(foundIndex, i));
+                    }
+                }
+                
+            }
+        }
+        
+        return result;
+        
+    }
+    
+    
+    
+    private String reverse(String str) {
+        return new StringBuilder(str).reverse().toString();
+    }
+    
+    private boolean isPalidrome(String str) {
+        int start = 0;
+        int end = str.length() - 1;
+        
+        while (start < end) {
+            if (str.charAt(start) != str.charAt(end)) {
+                return false;
+            }
+            
+            start++;
+            end--;
+        }
+        
+        return true;
+    }
+}
