@@ -30,7 +30,7 @@ public class Solution {
         if (i < board.length - 1) dfs(board, i + 1, j, p, result); 
         if (j < board[0].length - 1) dfs(board, i, j + 1, p, result); 
         
-        board[i][j] = 'c';
+        board[i][j] = c;
     }
     
     private TrieNode buildTrie(String[] words) {
